@@ -1,0 +1,12 @@
+
+body{
+    cursor: pointer;
+    height: 100%;
+    width: 100%;
+    cursor: crosshair;
+}
+#mybtn{
+    width: 100%;
+    height: 100%;
+    background:url("./textures/disturb.jpg") no-repeat center;
+}

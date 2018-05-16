@@ -8,3 +8,11 @@ npm-debug.log
 .jshintrc
 .vs/
 test/unit/three.*.unit.js
+examples/files/
+examples/fonts/
+examples/js/
+examples/models/
+examples/obj/
+examples/sounds/
+examples/textures/
+examples/nodes/
