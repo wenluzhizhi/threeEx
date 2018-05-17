@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>test</title>
+</head>
+<body>
+<script src="../build/three.js"></script>
+<script src="js/controls/OrbitControls.js"></script>
+<script src="js/Detector.js"></script>
+<script src='js/libs/dat.gui.min.js'></script>
+<script src='js/geometries/TeapotBufferGeometry.js'></script>
+
+<script>
+     var camera,scene,renderer;
+     var teapot, textureCube;
+     var effectController;
+     var ambientLight, light;
+     var wireMaterial, flatMaterial, gouraudMaterial, phongMaterial, texturedMaterial, reflectiveMaterial;
+     init();
+     function init() {
+
+         var container=document.createElement("div");
+         document.body.appendChild(container);
+
+         camera=new THREE.PerspectiveCamera(45,window.innerWidth/window.innerHeight,1,10000);
+         camera.position.set(20,0,1300);
+
+         renderer=new THREE.WebGLRenderer();
+         renderer.setSize(window.innerWidth,window.innerHeight);
+
+
+         scene=new THREE.Scene();
+         scene.background=new THREE.Color(0xaaaaaa);
+
+         ambientLight = new THREE.AmbientLight( 0x333333 );	// 0.2
+         scene.add(ambientLight);
+         var materialColor = new THREE.Color();
+         materialColor.setRGB( 1.0, 1.0, 0.0 );
+
+         wireMaterial = new THREE.MeshBasicMaterial( { color: 0xFFFFFF, wireframe: true } ) ;
+         gouraudMaterial = new THREE.MeshLambertMaterial( { color: materialColor, side: THREE.DoubleSide } );
+
+         container.appendChild(renderer.domElement);
+         setupGUI();
+         render();
+
+         window.addEventListener('resize',onWindowResize,false);
+         cameraControls = new THREE.OrbitControls( camera, renderer.domElement );
+         cameraControls.addEventListener( 'change', render );
+
+     }
+
+
+     function createNewTeapot() {
+         if(teapot!==undefined){
+             teapot.geometry.dispose();
+             scene.remove(teapot);
+         }
+
+         var teapotGeometry=new THREE.TeapotBufferGeometry(100,10);
+         teapot=new THREE.Mesh(teapotGeometry,gouraudMaterial);
+         teapot.position.set(200,0,0);
+         scene.add(teapot);
+     }
+
+     function setupGUI() {
+         effectController = {
+             shininess: 40.0,
+             bottom:true,
+             lsaturation:0.1,
+             newTess: 15,
+         }
+         var h;
+         var gui=new dat.GUI();
+         h=gui.addFolder("Material control");
+         h.add( effectController, "shininess", 1.0, 400.0, 1.0 ).name( "shininess" ).onChange( render );
+         h.add( effectController, "bottom" ).name( "display bottom" ).onChange( render );
+         h.add( effectController, "lsaturation", 0.0, 1.0, 0.025 ).name( "saturation" ).onChange( render );
+
+         h = gui.addFolder( "Tessellation control" );
+         h.add( effectController, "newTess", [ 2, 3, 4, 5, 6, 8, 10, 15, 20, 30, 40, 50 ] ).name( "Tessellation Level" ).onChange( render );
+
+     }
+
+
+     function onWindowResize() {
+         console.debug("function resize.......");
+     }
+
+
+     function render() {
+         createNewTeapot();
+         renderer.render(scene,camera);
+         //console.debug(effectController.shininess);
+
+     }
+
+     function  animate() {
+
+     }
+</script>
+</body>
+</html>

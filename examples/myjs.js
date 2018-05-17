@@ -11,44 +11,38 @@ class MyWeb {
         this.videoSetting = {width: 320, height: 240};
         this.bindEvent();
 
-
-        //var f1={};
-        //f1["name"]="sd";
-
-        //this.devices2.push(f1);
-
-         //console.log(this.devices2.length);
     }
 
     bindEvent() {
-        //alert("  "+this);
         this.myBtn.onclick=this.checkCamera(this);
     }
 
 
     checkCamera(_this) {
-        //alert("333  "+_this);
-        navigator.mediaDevices.enumerateDevices().then((devices) => {
-            console.log(devices);
-            let i = 0;
 
+        navigator.mediaDevices.enumerateDevices().then((devices) => {
             devices.find((device) => {
                 if (device.kind == "videoinput") {
                     //alert(this);
-                    console.log(device);
-                    let deviceInfo = {};
+                    //console.log(device);
+                    var deviceInfo = {};
                     deviceInfo['name'] = device.label || "camera";
                     deviceInfo['deviceId'] = device.deviceId;
+                    console.log("----"+deviceInfo);
                     _this.devices2.push(deviceInfo);
-                    this.deviceId=device.deviceId;
+
 
                 }
             });
         });
+
+         console.log("==sssss="+_this.devices2[0]);
+         _this.deviceId=_this.devices2[_this.devices2.length-1]['deviceId'];
          _this.openCamera(_this,_this.video,_this.deviceId).then(() => {
              alert("dddfdfffdf");
          });
     }
+
 
 
     openCamera(_this,video, deviceId, setting,) {
@@ -80,11 +74,7 @@ class MyWeb {
         });
 
     }
-
-
-
 }
-
 new MyWeb();
 
 

@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>myWebTest</title>
+</head>
+<body>
+<script src="three/three.js"></script>
+<script src="js/controls/DeviceOrientationControls.js"></script>
+<script src="js/controls/OrbitControls.js"></script>
+<script src="js/Detector.js"></script>
+<script src="jquery/dist/jquery.min.js"></script>
+<script>
+
+    var camera, renderer, scene;
+    var cameraController;
+    var cube;
+
+    init();
+    animate();
+
+    function init() {
+        var container = document.createElement("div");
+        document.body.appendChild(container);
+
+        camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 1, 8000);
+        camera.position.set(0, 0, 1300);
+
+        scene = new THREE.Scene();
+        scene.background = new THREE.Color(0x000000);
+
+        var gridHelper = new THREE.GridHelper(2000, 20);
+        //gridHelper.rotation.x=45;
+        scene.add(gridHelper);
+
+        var geometry = new THREE.BoxGeometry(100, 100, 100);
+        var material = new THREE.MeshBasicMaterial({color: 0xffff00});
+        cube = new THREE.Mesh(geometry, material);
+        cube.position.z = -500;
+        scene.add(cube);
+
+        renderer = new THREE.WebGLRenderer();
+        renderer.setSize(window.innerWidth, window.innerHeight);
+
+        container.appendChild(renderer.domElement)
+        cameraController = new THREE.OrbitControls(camera, renderer.domElement);
+
+    }
+
+    function animate() {
+
+        render();
+        requestAnimationFrame(animate);
+
+    }
+
+    function render() {
+        cameraController.update();
+        renderer.render(scene, camera);
+    }
+
+    function test() {
+        console.debug("-----------------");
+        console.debug(cube.position);
+        console.debug(cube.quaternion);
+        cube.position.set(0,0,-300);
+        cube.rotation.set(0,45,0);
+        camera.updateMatrixWorld(true);
+        camera.localToWorld(cube.position);
+        camera.getWorldQuaternion(this.mesh.quaternion);
+        console.debug(cube.position);
+    }
+
+    $(document).keydown(function (event) {
+        if (event.keyCode == 13)
+        {
+            console.debug("Enter...");
+            test();
+        }
+    });
+
+</script>
+</body>
+</html>
